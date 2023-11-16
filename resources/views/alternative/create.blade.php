@@ -1,0 +1,63 @@
+@extends('template.index')
+@section('content')
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Tambah Alternatif Baru</h1>
+                </div>
+                <div class="col-sm-6"></div>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <strong>Ups!</strong> Ada beberapa masalah dengan masukan Anda.<br><br>
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            @endif
+                            <form action="{{route('alternatives.store')}}" method="POST">
+                                @csrf
+                                <div class="form-group">
+                                    <label for="name">Nama</label>
+                                    <div class="input-group">
+                                        <input id="name" type="text" class="form-control" placeholder="Isi dengan nama orang atau kode" name="name" required>
+                                    </div>
+                                </div>
+                                @foreach ($criteriaweights as $cw)
+                                <div class="form-group">
+                                    <label for="criteria[{{$cw->id}}]">{{$cw->name}} - {{$cw->description}}</label>
+                                    <select class="form-control" id="criteria[{{$cw->id}}]"
+                                        name="criteria[{{$cw->id}}]">
+                                        <!--
+                                        @php
+                                            $res = $criteriaratings->where('criteria_id', $cw->id)->all();
+                                        @endphp
+                                        -->
+                                        @foreach ($res as $cr)
+                                        <option value="{{$cr->id}}">{{$cr->rating}} - {{$cr->description}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @endforeach
+                                <button type="submit" class="btn btn-primary">Kirim</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
